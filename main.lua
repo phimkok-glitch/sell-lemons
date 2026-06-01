@@ -8,20 +8,20 @@ local VirtualInputManager = game:GetService("VirtualInputManager")
 
 local CommF = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("CommF_")
 
-local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/Library.lua"))()
-local Window = Library:CreateWindow({
-    Title = "BF v1.1",
-    Center = true,
-    AutoShow = true,
-    Size = UDim2.new(0, 320, 0, 400), -- под телефон
+local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
+
+local Window = Rayfield:CreateWindow({
+    Name = "BF Cheat v1.1",
+    LoadingTitle = "Blox Fruits",
+    LoadingSubtitle = "by Custom",
+    ConfigurationSaving = { Enabled = false },
+    Discord = { Enabled = false },
+    KeySystem = false,
 })
 
-local Tabs = {
-    Farm     = Window:AddTab("Фарм"),
-    Combat   = Window:AddTab("Combat"),
-    Visuals  = Window:AddTab("ESP"),
-    Settings = Window:AddTab("Настр")
-}
+local FarmTab    = Window:CreateTab("Фарм",    4483362458)
+local CombatTab  = Window:CreateTab("Combat",  4483362458)
+local VisualsTab = Window:CreateTab("ESP",     4483362458)
 
 local Settings = {
     AutoFarm   = false,
@@ -30,47 +30,71 @@ local Settings = {
     ESPPlayers = false,
 }
 
-local AutoFarmToggle  = Tabs.Farm:AddToggle("AutoFarmToggle",   {Title = "Автофарм",   Default = false, Callback = function(v) Settings.AutoFarm   = v end})
-local AutoQuestToggle = Tabs.Farm:AddToggle("AutoQuestToggle",  {Title = "Auto Quest", Default = false, Callback = function(v) Settings.AutoQuest  = v end})
-local AutoParryToggle = Tabs.Combat:AddToggle("AutoParryToggle",{Title = "Auto Parry", Default = false, Callback = function(v) Settings.AutoParry  = v end})
-local ESPToggle       = Tabs.Visuals:AddToggle("ESPPlayersToggle",{Title = "ESP",      Default = false, Callback = function(v) Settings.ESPPlayers = v end})
+FarmTab:CreateToggle({
+    Name = "Автофарм",
+    CurrentValue = false,
+    Flag = "AutoFarm",
+    Callback = function(v) Settings.AutoFarm = v end,
+})
 
-print("✅ BF v1.1 загружен!")
+FarmTab:CreateToggle({
+    Name = "Auto Quest",
+    CurrentValue = false,
+    Flag = "AutoQuest",
+    Callback = function(v) Settings.AutoQuest = v end,
+})
+
+CombatTab:CreateToggle({
+    Name = "Auto Parry",
+    CurrentValue = false,
+    Flag = "AutoParry",
+    Callback = function(v) Settings.AutoParry = v end,
+})
+
+VisualsTab:CreateToggle({
+    Name = "ESP Игроки",
+    CurrentValue = false,
+    Flag = "ESPPlayers",
+    Callback = function(v) Settings.ESPPlayers = v end,
+})
+
+print("✅ BF v1.1 Rayfield загружен!")
 
 local ESPTable = {}
 
 local QuestList = {
-    {Level = 0,    QuestName = "BanditQuest1",            QuestID = 1},
-    {Level = 10,   QuestName = "JungleQuest",             QuestID = 1},
-    {Level = 15,   QuestName = "BuggyQuest1",             QuestID = 1},
-    {Level = 30,   QuestName = "PirateVillageQuest",      QuestID = 1},
-    {Level = 40,   QuestName = "DesertQuest",             QuestID = 1},
-    {Level = 60,   QuestName = "SnowQuest",               QuestID = 1},
-    {Level = 75,   QuestName = "MarineQuest2",            QuestID = 1},
-    {Level = 90,   QuestName = "SkylandsQuest",           QuestID = 1},
-    {Level = 100,  QuestName = "FishmanQuest",            QuestID = 1},
-    {Level = 120,  QuestName = "GodQuest",                QuestID = 1},
-    {Level = 700,  QuestName = "Area1Quest",              QuestID = 1},
-    {Level = 725,  QuestName = "Area2Quest",              QuestID = 1},
-    {Level = 775,  QuestName = "ZombieQuest",             QuestID = 1},
-    {Level = 875,  QuestName = "SnowMountainQuest",       QuestID = 1},
-    {Level = 925,  QuestName = "IceSideQuest",            QuestID = 1},
-    {Level = 1000, QuestName = "ColdIslandQuest",         QuestID = 1},
-    {Level = 1100, QuestName = "MagmaQuest",              QuestID = 1},
-    {Level = 1175, QuestName = "FountainQuest",           QuestID = 1},
-    {Level = 1250, QuestName = "ShipQuest1",              QuestID = 1},
-    {Level = 1350, QuestName = "ShipQuest2",              QuestID = 1},
-    {Level = 1425, QuestName = "ForgottenQuest",          QuestID = 1},
-    {Level = 1500, QuestName = "PirateMillionaireQuest",  QuestID = 1},
-    {Level = 1575, QuestName = "DragonCrewWarriorQuest",  QuestID = 1},
-    {Level = 1700, QuestName = "MarineCommodoreQuest",    QuestID = 1},
-    {Level = 1775, QuestName = "FishmanRaiderQuest",      QuestID = 1},
-    {Level = 1975, QuestName = "HauntedQuest",            QuestID = 1},
-    {Level = 2075, QuestName = "SeaOfTreatsQuest",        QuestID = 1},
-    {Level = 2450, QuestName = "TikiOutpostQuest",        QuestID = 1},
-    {Level = 2600, QuestName = "SubmergedIslandQuest",    QuestID = 1},
+    {Level = 0,    QuestName = "BanditQuest1",           QuestID = 1},
+    {Level = 10,   QuestName = "JungleQuest",            QuestID = 1},
+    {Level = 15,   QuestName = "BuggyQuest1",            QuestID = 1},
+    {Level = 30,   QuestName = "PirateVillageQuest",     QuestID = 1},
+    {Level = 40,   QuestName = "DesertQuest",            QuestID = 1},
+    {Level = 60,   QuestName = "SnowQuest",              QuestID = 1},
+    {Level = 75,   QuestName = "MarineQuest2",           QuestID = 1},
+    {Level = 90,   QuestName = "SkylandsQuest",          QuestID = 1},
+    {Level = 100,  QuestName = "FishmanQuest",           QuestID = 1},
+    {Level = 120,  QuestName = "GodQuest",               QuestID = 1},
+    {Level = 700,  QuestName = "Area1Quest",             QuestID = 1},
+    {Level = 725,  QuestName = "Area2Quest",             QuestID = 1},
+    {Level = 775,  QuestName = "ZombieQuest",            QuestID = 1},
+    {Level = 875,  QuestName = "SnowMountainQuest",      QuestID = 1},
+    {Level = 925,  QuestName = "IceSideQuest",           QuestID = 1},
+    {Level = 1000, QuestName = "ColdIslandQuest",        QuestID = 1},
+    {Level = 1100, QuestName = "MagmaQuest",             QuestID = 1},
+    {Level = 1175, QuestName = "FountainQuest",          QuestID = 1},
+    {Level = 1250, QuestName = "ShipQuest1",             QuestID = 1},
+    {Level = 1350, QuestName = "ShipQuest2",             QuestID = 1},
+    {Level = 1425, QuestName = "ForgottenQuest",         QuestID = 1},
+    {Level = 1500, QuestName = "PirateMillionaireQuest", QuestID = 1},
+    {Level = 1575, QuestName = "DragonCrewWarriorQuest", QuestID = 1},
+    {Level = 1700, QuestName = "MarineCommodoreQuest",   QuestID = 1},
+    {Level = 1775, QuestName = "FishmanRaiderQuest",     QuestID = 1},
+    {Level = 1975, QuestName = "HauntedQuest",           QuestID = 1},
+    {Level = 2075, QuestName = "SeaOfTreatsQuest",       QuestID = 1},
+    {Level = 2450, QuestName = "TikiOutpostQuest",       QuestID = 1},
+    {Level = 2600, QuestName = "SubmergedIslandQuest",   QuestID = 1},
 }
 
+-- AUTO QUEST
 task.spawn(function()
     while task.wait(2) do
         if not Settings.AutoQuest then continue end
@@ -91,6 +115,7 @@ task.spawn(function()
     end
 end)
 
+-- AUTO FARM
 task.spawn(function()
     while true do
         if not Settings.AutoFarm then task.wait(1) continue end
@@ -130,6 +155,7 @@ task.spawn(function()
     end
 end)
 
+-- AUTO PARRY
 task.spawn(function()
     while task.wait(0.07) do
         if not Settings.AutoParry then continue end
@@ -153,6 +179,7 @@ task.spawn(function()
     end
 end)
 
+-- ESP
 task.spawn(function()
     while task.wait(0.5) do
         if Settings.ESPPlayers then
@@ -179,7 +206,8 @@ task.spawn(function()
                         ESPTable[plr] = bg
                     end
                     local dist = math.floor((char.HumanoidRootPart.Position - myChar.HumanoidRootPart.Position).Magnitude)
-                    ESPTable[plr].TextLabel.Text = string.format("%s\nHP: %d/%d\nDist: %dm", plr.Name, math.floor(char.Humanoid.Health), math.floor(char.Humanoid.MaxHealth), dist)
+                    ESPTable[plr].TextLabel.Text = string.format("%s\nHP: %d/%d\nDist: %dm",
+                        plr.Name, math.floor(char.Humanoid.Health), math.floor(char.Humanoid.MaxHealth), dist)
                 end
             end
         else
