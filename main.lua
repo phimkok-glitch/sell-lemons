@@ -1,18 +1,18 @@
---// Lemon Empire Hub v2.3 - Исправленный Auto Fruit + Цвет
+--// Lemon Empire Hub v2.4 - Чистая версия
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
--- Настройка цвета (светло-синий)
+-- Светло-синий цвет
 Rayfield.Theme = {
-    Default = Color3.fromRGB(30, 30, 50),
+    Default = Color3.fromRGB(25, 25, 45),
     TextColor = Color3.fromRGB(220, 240, 255),
-    MainColor = Color3.fromRGB(40, 80, 160),      -- Основной синий
-    AccentColor = Color3.fromRGB(80, 160, 255),   -- Светло-синий акцент
+    MainColor = Color3.fromRGB(40, 80, 160),
+    AccentColor = Color3.fromRGB(80, 160, 255),
 }
 
 local Window = Rayfield:CreateWindow({
-    Name = "🍋 Lemon Empire Hub v2.3",
+    Name = "🍋 Lemon Empire Hub v2.4",
     LoadingTitle = "Lemon Empire",
-    LoadingSubtitle = "Исправления",
+    LoadingSubtitle = "Чистая версия",
     ConfigurationSaving = { Enabled = false },
     KeySystem = false
 })
@@ -23,8 +23,10 @@ local FarmTab = Window:CreateTab("Фарм", 4483362458)
 local userTycoon = workspace:FindFirstChild("Tycoon2")
 
 local AutoBuy = false
-local AutoSell = false
+local AutoUpgrade = false
 local AutoFruit = false
+local AutoRebirth = false
+local AutoEvolve = false
 
 -- Auto Buy без Decoration
 local function buyAllNoDecoration()
@@ -42,31 +44,23 @@ local function buyAllNoDecoration()
     end
 end
 
--- Auto Sell
 task.spawn(function()
     while true do
-        task.wait(0.2)
-        if AutoSell then
-            pcall(function()
-                local sell = userTycoon and userTycoon:FindFirstChild("Sell", true)
-                if sell and sell:FindFirstChildOfClass("ClickDetector") then
-                    fireclickdetector(sell:FindFirstChildOfClass("ClickDetector"))
-                end
-            end)
-        end
+        task.wait(0.1)
+        if AutoBuy then pcall(buyAllNoDecoration) end
     end
 end)
 
 -- Улучшенный Auto Fruit
 task.spawn(function()
     while true do
-        task.wait(0.3)
+        task.wait(0.25)
         if AutoFruit then
             for _, tree in ipairs(workspace:GetDescendants()) do
-                if tree.Name == "LemonTree" or tree.Name:find("Tree") then
-                    for _, fruit in ipairs(tree:GetDescendants()) do
-                        if fruit.Name == "Fruit" and fruit:FindFirstChild("ClickPart") then
-                            local cd = fruit.ClickPart:FindFirstChildOfClass("ClickDetector")
+                if tree.Name == "LemonTree" then
+                    for _, part in ipairs(tree:GetDescendants()) do
+                        if part.Name == "Fruit" and part:FindFirstChild("ClickPart") then
+                            local cd = part.ClickPart:FindFirstChildOfClass("ClickDetector")
                             if cd then
                                 pcall(function() fireclickdetector(cd) end)
                             end
@@ -79,8 +73,38 @@ task.spawn(function()
 end)
 
 -- GUI
-MainTab:CreateToggle({Name = "🔄 Auto Buy (без Decoration)", CurrentValue = false, Callback = function(v) AutoBuy = v end})
-MainTab:CreateToggle({Name = "💰 Auto Sell", CurrentValue = false, Callback = function(v) AutoSell = v end})
-FarmTab:CreateToggle({Name = "🍋 Auto Fruit (Сбор лимонов)", CurrentValue = false, Callback = function(v) AutoFruit = v end})
+MainTab:CreateToggle({
+    Name = "🔄 Auto Buy (без Decoration)",
+    CurrentValue = false,
+    Callback = function(v) AutoBuy = v end
+})
 
-Rayfield:Notify({Title = "✅ v2.3 Загружено", Content = "Цвет изменён + Auto Fruit улучшен", Duration = 6})
+MainTab:CreateToggle({
+    Name = "⬆ Auto Upgrade",
+    CurrentValue = false,
+    Callback = function(v) AutoUpgrade = v end
+})
+
+FarmTab:CreateToggle({
+    Name = "🍋 Auto Fruit",
+    CurrentValue = false,
+    Callback = function(v) AutoFruit = v end
+})
+
+MainTab:CreateToggle({
+    Name = "♻ Auto Rebirth",
+    CurrentValue = false,
+    Callback = function(v) AutoRebirth = v end
+})
+
+MainTab:CreateToggle({
+    Name = "🌟 Auto Evolve",
+    CurrentValue = false,
+    Callback = function(v) AutoEvolve = v end
+})
+
+Rayfield:Notify({
+    Title = "✅ v2.4 Загружено",
+    Content = "Вернул как было + улучшил Auto Fruit",
+    Duration = 5
+})
